@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from tg2cloud.domain.models import STAGING_PATTERN, StagingScan
 
-__all__ = ["STAGING_PATTERN", "RemoteReviewRequired", "SourceTemporaryError", "StagingScan", "failure_kind", "needs_review", "redact_text", "safe_failure"]
+__all__ = ["STAGING_PATTERN", "DownloadStalledError", "RemoteReviewRequired", "SourceTemporaryError", "StagingScan", "failure_kind", "needs_review", "redact_text", "safe_failure"]
 
 import re
 from typing import ClassVar
@@ -13,6 +13,13 @@ from urllib.parse import quote
 
 class RemoteReviewRequired(RuntimeError):
     """The recorded object must be kept until the owner chooses a recovery action."""
+
+
+class DownloadStalledError(TimeoutError):
+    """Only raised after the idle source operation has actually terminated."""
+
+    def __init__(self):
+        super().__init__("Telegram 下载长时间无数据进度；本次尝试已安全回收，按现有次数限制重试")
 
 class SourceTemporaryError(ConnectionError):
     """A fixed, safe source error that retains the existing bounded retries."""
@@ -59,6 +66,8 @@ FAILURE_MESSAGES = {
 
 def safe_failure(error: BaseException | str) -> str:
     """Never persist/forward external stderr, URLs, tokens or passwords."""
+    if isinstance(error, DownloadStalledError):
+        return str(error)
     if isinstance(error, SourceTemporaryError):
         return SourceTemporaryError.MESSAGES[error.kind]
     kind = failure_kind(error)

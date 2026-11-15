@@ -25,6 +25,7 @@ def collect(data_dir: Path, *, environment=None, started_at: float = 0) -> dict:
               "checks": snapshot["checks"], "listener": snapshot["listener"],
               "observations": snapshot["observations"], "failures": {},
               "admission": snapshot.get("admission"), "waiting": None,
+              "transfers": snapshot.get("transfers"),
               "disk_free_bytes": None, "budget_bytes": None, "configuration": "incomplete",
               "logs": "未读取原始日志；仅统计任务中白名单错误分类（最近7天）"}
     if report["edition"] not in {"clouddrive2", "openlist"}:
@@ -64,8 +65,11 @@ def collect(data_dir: Path, *, environment=None, started_at: float = 0) -> dict:
                 "SELECT CASE WHEN next_retry_at>? THEN 'retry' "
                 "WHEN wait_reason='等待个人并发额度' THEN 'member' "
                 "WHEN wait_reason='等待本地临时空间额度' THEN 'budget' "
-                "WHEN wait_reason LIKE '等待真实磁盘空间%' THEN 'disk' ELSE 'other' END AS kind,COUNT(*) "
-                "FROM tasks WHERE state='queued' AND cancel_requested=0 GROUP BY kind", (time.time(),)).fetchall()
+                "WHEN wait_reason LIKE '等待真实磁盘空间%' THEN 'disk' "
+                "WHEN (wait_reason IS NULL OR wait_reason='') AND ? IS NOT NULL THEN ? "
+                "ELSE 'other' END AS kind,COUNT(*) "
+                "FROM tasks WHERE state='queued' AND cancel_requested=0 GROUP BY kind",
+                (time.time(), snapshot.get("queue_wait"), snapshot.get("queue_wait"))).fetchall()
             report["waiting"] = {kind: count for kind, count in rows}
     except sqlite3.Error:
         report["failures"] = {"unchecked": 0}

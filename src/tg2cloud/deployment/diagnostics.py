@@ -157,6 +157,8 @@ def recommendations(checks: dict, failures: dict, configuration: str, containers
         tips.append("下载资源不足：核对可用内存、容器内存上限、暂存额度与文件系统可用空间；不降低保护阈值或删除失败保留文件。")
     if checks.get("queue") == "paused":
         tips.append("调度已手动暂停：确认暂停原因解决后再恢复；诊断不会自动恢复调度。")
+    if checks.get("queue") == "failed":
+        tips.append("队列存在无进度下载：查看进度健康与回收状态；旧协程退出后才会按次数限制重试，不重复启动同一任务或删除 Session。")
     if failures.get("remote_conflict", 0):
         tips.append("远端冲突：在 Bot 任务详情核对本地保留文件与远端状态，再确认“换名重传”；不要删除或覆盖未知远端文件。")
     if failures.get("source_access", 0):
@@ -236,6 +238,7 @@ def collect(instance, session) -> str:
         for key, label in readiness.LABELS.items():
             lines.append(label + "：" + readiness.STATES[value["checks"][key]])
         lines.extend(readiness.admission_lines(value.get("admission")))
+        lines.extend(readiness.transfer_lines(value.get("transfers")))
         lines.extend(readiness.waiting_lines(value.get("waiting")))
         for key, label in (("disk_free_bytes", "已检查目录最小可用空间"), ("budget_bytes", "任务暂存额度")):
             amount = value.get(key)

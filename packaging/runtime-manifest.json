@@ -135,6 +135,7 @@
     "src/tg2cloud/transfer/service.py",
     "src/tg2cloud/transfer/streaming.py",
     "src/tg2cloud/transfer/upload.py",
+    "src/tg2cloud/transfer/watchdog.py",
     "src/tg2cloud/version.py"
   ]
 }

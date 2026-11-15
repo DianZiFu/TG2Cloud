@@ -1,5 +1,9 @@
 # 更新记录
 
+## TG2Cloud v1.5.9
+
+版本日期：2026-11-15，待发布。普通下载与流式取源增加 300 秒有效字节无进度保护，安全回收后按既有次数限制重试；监听有限冷却、正常慢速下载与目的端背压分别处理。业务就绪识别停滞，诊断区分等待下载名额与等待停滞回收。无数据库迁移、新依赖或安装参数变化，两种部署使用同一 Bot 核心。实际 CI、资源及发布后 VPS 验收见[本版记录](docs/development/V159-ACCEPTANCE.md)。
+
 ## TG2Cloud v1.5.8
 
 版本日期：2026-11-08。[v1.5.8 正式版](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.8)已发布；同标签原生双架构 CI、源码、共享镜像及两 Edition format 3 部署包已核验，详见[发布记录](docs/development/V158-ACCEPTANCE.md)。真实用户 VPS 实机验收尚未执行，由用户在发布后进行。
@@ -197,12 +201,13 @@
 
 发布后验收补充：用户已提供 v1.4.5 的 CloudDrive2 ARM64 升级与单独 WebDAV 写入日志，按[记录范围](https://github.com/LuoPoJunZi/TG2Cloud/blob/c7e0b4b7497fbfa258c752dcff4666d1e2011eae/docs/development/V145-ACCEPTANCE.md)保留；上段未验收说明是发布当时状态，不扩展到本版或其他场景。
 
-本文件是 TG2Cloud 的完整版本记录，保留 **v1.0.0 至 v1.5.8 共 39 个版本**分别新增、修复和调整的内容，不以 GitHub 当前保留的 Release 数量裁剪历史。下表用于速查，点击版本可阅读当时的详细改动与验收边界。
+本文件是 TG2Cloud 的完整版本记录，保留 **v1.0.0 至 v1.5.9 共 40 个版本**分别新增、修复和调整的内容，不以 GitHub 当前保留的 Release 数量裁剪历史。下表用于速查，点击版本可阅读当时的详细改动与验收边界。
 
 截至 **2026-10-21**，GitHub 保留 [v1.4.2](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.4.2)、[v1.4.1](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.4.1)、[v1.2.1](https://github.com/LuoPoJunZi/TG2Cloud/blob/c7e0b4b7497fbfa258c752dcff4666d1e2011eae/CHANGELOG.md#tg2cloud-v121) 三个 Release／Tag。v1.0.2 及其他版本的发布页和标签虽已移除，下面的变更记录仍完整保留；“当时已发布／测试通过”不代表今天仍可下载，也不代表当前所有环境已验收。
 
 | 版本 | 这一版主要做了什么 |
 | --- | --- |
+| [v1.5.9](#tg2cloud-v159) | 下载停滞保护、安全回收、业务就绪及排队原因诊断。 |
 | [v1.5.8](#tg2cloud-v158) | Compose 统一管理、凭据隔离、资源诊断及两种部署的安全升级边界。 |
 | [v1.5.7](#tg2cloud-v157) | 监听下载有限冷却恢复、来源提示和实际容器日志限额诊断。 |
 | [v1.5.6](#tg2cloud-v156) | 凭据标准输入、私密文件权限、容器日志轮转与独立监听健康诊断。 |

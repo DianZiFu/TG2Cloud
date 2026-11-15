@@ -28,10 +28,10 @@ python -B .github/scripts/maintenance_preflight.py --previous-tag v1.5.8 --json
 
 ```bash
 python -B .github/scripts/prepare_bootstrap.py --directory build/bootstrap-candidate
-python -B .github/scripts/release_metadata.py --tag v1.5.8
+python -B .github/scripts/release_metadata.py --tag v1.5.9
 ```
 
-只生成候选或检查元数据不代表已经发布。当前 helper 身份及实际 A/B 结果见[当前发布记录](V158-ACCEPTANCE.md)。
+只生成候选或检查元数据不代表已经发布。当前 helper 身份及实际 A/B 结果见[当前发布记录](V159-ACCEPTANCE.md)。
 
 ## 3. 源码发布
 

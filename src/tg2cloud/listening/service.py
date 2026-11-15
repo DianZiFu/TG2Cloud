@@ -205,6 +205,8 @@ class CheckedSource:
                 raise ListenerReadError("任务已取消；停止监听下载")
 
         def waiting(seconds):
+            from tg2cloud.transfer.watchdog import note_wait
+            note_wait(self.listener.owner, self.task["id"], seconds)
             self.listener.download_limited()
             current = account.state(self.listener.db)
             account.write_state(

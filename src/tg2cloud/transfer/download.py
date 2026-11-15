@@ -12,6 +12,7 @@ from tg2cloud.domain.errors import (
 from tg2cloud.domain.naming import (
     safe_file_name,
 )
+from tg2cloud.transfer.watchdog import DownloadGuard
 
 
 @task_actor
@@ -27,9 +28,12 @@ async def _download_one(self, task_id: int) -> None:
     final_path = self.settings.download_dir / final_name
     last_progress_at = 0.0
     last_failure = None
+    guard = None
 
     def progress(received: int, total: int) -> None:
         nonlocal last_progress_at
+        if guard is not None:
+            guard.advance(received)
         now = time.monotonic()
         if now - last_progress_at >= 1 or received >= total:
             self.db.update(task_id, downloaded_bytes=int(received))
@@ -58,15 +62,17 @@ async def _download_one(self, task_id: int) -> None:
             if part_path.exists():
                 part_path.unlink()
             try:
-                message = await source.get_messages(
+                guard = DownloadGuard(self, task_id)
+                message = await guard.run(source.get_messages(
                     int(task["chat_id"]), ids=int(task["message_id"])
-                )
+                ))
                 if not message or not message.media:
                     raise RuntimeError("Telegram 消息或文件已经不可访问")
                 self._record_progress(task_id, "download", 0, reset=True)
-                result = await source.download_media(
+                guard = DownloadGuard(self, task_id)
+                result = await guard.run(source.download_media(
                     message, file=str(part_path), progress_callback=progress
-                )
+                ))
                 if not result or not part_path.is_file():
                     raise RuntimeError("Telethon 没有生成下载文件")
                 actual_size = part_path.stat().st_size

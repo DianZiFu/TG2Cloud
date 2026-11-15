@@ -163,6 +163,24 @@ class ReportTests(unittest.TestCase):
         self.assertIn("不把只读诊断当作完整验收", report)
         self.assertIn("不含公网", report)
 
+    def test_stalled_transfer_and_busy_queue_are_named_without_private_task_data(self):
+        value, instance, session = self.report_fixture()
+        value["checks"]["queue"] = "failed"
+        value["transfers"] = {"active": 1, "stalled": 1, "cancelling": 1,
+                              "oldest_idle_seconds": 360, "timeout_seconds": 300}
+        value["waiting"] = {"download_stall": 69}
+        with patch.object(host, "inspect_entry", return_value=("HTTPS 管理入口", "本机检查通过")):
+            report = host.collect(instance, session)
+        self.assertIn("停滞 1 项", report)
+        self.assertIn("等待停滞下载回收 69", report)
+        self.assertIn("队列存在无进度下载", report)
+        self.assertNotIn("本次未发现明确处理项", report)
+        value["transfers"] = {"PRIVATE_CONTENT": "PRIVATE_SECRET"}
+        with patch.object(host, "inspect_entry", return_value=("HTTPS 管理入口", "本机检查通过")):
+            report = host.collect(instance, session)
+        self.assertIn("下载进度健康：未核实", report)
+        self.assertNotIn("PRIVATE_SECRET", report)
+
     def test_snapshot_from_a_different_running_version_is_not_used_for_advice(self):
         value, instance, session = self.report_fixture()
         instance.version = "1.3.4"

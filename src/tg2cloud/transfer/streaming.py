@@ -16,6 +16,7 @@ from tg2cloud.domain.naming import (
 )
 from tg2cloud.storage.policies import policy_for
 from tg2cloud.storage.rclone import MoveUncertainError
+from tg2cloud.transfer.watchdog import DownloadGuard
 
 
 async def _finalize_stream_remote(
@@ -102,9 +103,10 @@ async def _stream_one(self, task_id: int) -> None:
             try:
                 if await self._resume_remote(task_id, task, None, safe_name):
                     return
-                message = await source.get_messages(
+                guard = DownloadGuard(self, task_id)
+                message = await guard.run(source.get_messages(
                     int(task["chat_id"]), ids=int(task["message_id"])
-                )
+                ))
                 if not message or not message.media:
                     raise RuntimeError("Telegram 消息或文件已经不可访问")
                 remote_write = await self._begin_remote_write(
@@ -121,9 +123,11 @@ async def _stream_one(self, task_id: int) -> None:
                     remote_write, int(task["file_size"])
                 )
                 last_progress_at = 0.0
+                guard = DownloadGuard(self, task_id)
 
-                def progress(received: int, total: int) -> None:
+                def progress(received: int, total: int, *, guard=guard) -> None:
                     nonlocal last_progress_at
+                    guard.advance(received)
                     now = time.monotonic()
                     if now - last_progress_at >= 1 or received >= total:
                         self.db.update(
@@ -135,11 +139,11 @@ async def _stream_one(self, task_id: int) -> None:
                         last_progress_at = now
 
                 self._record_progress(task_id, "stream", 0, reset=True)
-                await source.download_media(
+                await guard.run(source.download_media(
                     message,
-                    file=stream,
+                    file=guard.stream(stream),
                     progress_callback=progress,
-                )
+                ))
                 streamed_size = stream.tell()
                 if streamed_size != int(task["file_size"]):
                     raise RuntimeError(

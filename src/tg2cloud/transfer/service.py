@@ -76,6 +76,7 @@ class TaskService:
         self.destination_error = "尚未检查"
         self.destination_failure_kind = ""
         self._progress: dict[int, dict[str, Any]] = {}
+        self._download_guards: dict[int, Any] = {}
         self._watch_messages: dict[int, Any] = {}
         self.download_tasks: dict[int, asyncio.Task[None]] = {}
         self.upload_tasks: dict[int, asyncio.Task[None]] = {}

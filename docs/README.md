@@ -13,7 +13,7 @@
 
 一键脚本与 Compose 是不同部署方式，已有实例按原方式升级，不能相互覆盖或接管。
 
-v1.5.8 的 Compose 统一菜单、凭据隔离与资源保护见 [Compose 安全维护](COMPOSE-MANAGEMENT.md)；发布状态及未验收范围见[本版记录](development/V158-ACCEPTANCE.md)。
+v1.5.9 正在准备下载停滞保护与排队诊断修复，见[本版记录](development/V159-ACCEPTANCE.md)。两种部署仍按原方式升级，真实 VPS 验收安排在发布之后。
 
 ## 使用与可选功能
 
@@ -28,6 +28,7 @@ v1.5.8 的 Compose 统一菜单、凭据隔离与资源保护见 [Compose 安全
 ## 运维和排查
 
 - [运行状态与维护](OPERATIONS.md)：`tg2cloud` 菜单、日志、服务、凭据和配置变更。
+- [Compose 安全维护](COMPOSE-MANAGEMENT.md)：独立部署的离线菜单、资源诊断、升级和备份。
 - [任务恢复与验证](RECOVERY.md)：取消后重新转存、远端冲突、遗留文件和磁盘保护。
 - [配置与运行目录](CONFIGURATION.md)：环境变量、账号边界、数据库及 Session。
 - [备份与恢复预检](BACKUP-RESTORE.md)：一致性快照、隔离检查、恢复前准备与回退。
@@ -36,6 +37,7 @@ v1.5.8 的 Compose 统一菜单、凭据隔离与资源保护见 [Compose 安全
 
 ## 开发与发布
 
+- [v1.5.9 发布与兼容记录](development/V159-ACCEPTANCE.md)：下载无进度保护、就绪降级与排队原因。
 - [v1.5.8 发布与兼容记录](development/V158-ACCEPTANCE.md)：两种部署的共享兼容、Compose 管理与安全维护；实机验收安排在发布后。
 
 - [贡献指南](../.github/CONTRIBUTING.md)

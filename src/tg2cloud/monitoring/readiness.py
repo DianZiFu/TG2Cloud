@@ -12,7 +12,7 @@ import tempfile
 import time
 from pathlib import Path
 
-from tg2cloud.deployment.readiness import validated_admission
+from tg2cloud.deployment.readiness import validated_admission, validated_transfers
 from tg2cloud.monitoring import observations
 from tg2cloud.version import VERSION
 
@@ -20,7 +20,7 @@ CHECKS = ("heartbeat", "telegram", "destination", "queue", "capacity")
 STATES = {"ok", "failed", "unknown", "paused", "cooldown", "partial"}
 
 
-def admission(service, used: int, free: int) -> dict:
+def admission(service, used: int, free: int, *, queued: int = 0) -> dict:
     snapshot, settings = service.snapshot, service.settings
     available = snapshot.memory_available
     minimum = settings.memory_hard_min_bytes
@@ -41,6 +41,9 @@ def admission(service, used: int, free: int) -> dict:
         blocked.append("paused")
     if windows["download_window"] == 0:
         blocked.append("download_window")
+    if queued and windows["download_window"] is not None and windows["download_window"] > 0 \
+            and len(service.download_tasks) >= windows["download_window"]:
+        blocked.append("download_busy")
     return {**windows, "memory_available_bytes": available, "memory_hard_min_bytes": minimum,
             "memory_limit_bytes": getattr(snapshot, "memory_limit", None), "blocked_by": blocked}
 
@@ -60,9 +63,14 @@ def publish(service, counts, *, used_local_bytes: int | None = None) -> None:
         destination = "cooldown"
     if used_local_bytes is None:
         used_local_bytes = service.db.used_local_bytes()
-    resources = admission(service, used_local_bytes, free)
+    resources = admission(service, used_local_bytes, free, queued=int(counts.get("queued", 0)))
+    from tg2cloud.transfer.watchdog import observation
+    transfers = observation(service)
+    queue_wait = None
+    if resources["blocked_by"] == ["download_busy"]:
+        queue_wait = "download_stall" if transfers["stalled"] else "download_slots"
     checks = {"telegram": "ok" if connected is True else "failed" if connected is False else "unknown",
-              "destination": destination, "queue": "paused" if service.db.is_paused() else "ok",
+              "destination": destination, "queue": "failed" if transfers["stalled"] else "paused" if service.db.is_paused() else "ok",
               "capacity": "ok" if free > settings.min_free_disk_bytes
               and used_local_bytes < settings.local_budget_bytes
               and service.snapshot.memory_available >= settings.memory_hard_min_bytes else "failed"}
@@ -72,6 +80,7 @@ def publish(service, counts, *, used_local_bytes: int | None = None) -> None:
              "queued": int(counts.get("queued", 0)),
              "active": len(service.download_tasks) + len(service.upload_tasks),
              "admission": resources,
+             "transfers": transfers, "queue_wait": queue_wait,
              "listener": observations.listener_observation(service),
              "observations": observations.recent_events(service)}
     descriptor, name = tempfile.mkstemp(prefix=".readiness-", dir=settings.data_dir)
@@ -96,7 +105,8 @@ def read(data_dir: Path, *, now: float, started_at: float = 0) -> dict:
             checks["heartbeat"] = "failed"
     result = {"schema": 1, "checks": checks, "ready": False, "version": VERSION,
               "queued": 0, "active": 0, "cooldown_seconds": 0,
-              "listener": observations.unknown_listener(), "observations": None, "admission": None}
+              "listener": observations.unknown_listener(), "observations": None, "admission": None,
+              "transfers": None, "queue_wait": None}
     try:
         path = data_dir / "readiness.json"
         if path.is_symlink() or path.stat().st_size > 16384:
@@ -115,11 +125,20 @@ def read(data_dir: Path, *, now: float, started_at: float = 0) -> dict:
                 return result
         if raw.get("edition") not in {"clouddrive2", "openlist"}:
             return result
+        transfers = validated_transfers(raw.get("transfers"))
+        if "transfers" in raw and transfers is None:
+            return result
+        if raw.get("queue_wait") not in {None, "download_slots", "download_stall"}:
+            return result
         checks.update(raw["checks"])
         result.update({key: raw[key] for key in ("edition", "queued", "active", "cooldown_seconds")})
         result["listener"] = observations.validate_listener(raw.get("listener")) or observations.unknown_listener()
         result["observations"] = observations.validate_events(raw.get("observations"))
         result["admission"] = validated_admission(raw.get("admission"))
+        result["transfers"] = transfers
+        result["queue_wait"] = raw.get("queue_wait")
+        if transfers and transfers["stalled"]:
+            checks["queue"] = "failed"
         result["ready"] = all(state == "ok" for state in checks.values())
     except (OSError, ValueError, TypeError, KeyError):
         pass

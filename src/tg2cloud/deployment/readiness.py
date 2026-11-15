@@ -19,6 +19,7 @@ LISTENER_STATES = {
 }
 
 EVENT_LABELS = {
+    "download_stalled": "下载无进度超时",
     "listener_wait": "Telegram 下载限速等待",
     "listener_network": "监听请求连接异常",
     "listener_server": "Telegram 服务端异常",
@@ -119,7 +120,26 @@ def listener_line(value):
     return line
 
 BLOCKER_LABELS = {"memory": "可用内存低于保护门槛", "disk": "文件系统安全线", "budget": "暂存额度",
-                  "destination": "目的端未就绪", "paused": "调度暂停", "download_window": "下载窗口未放行"}
+                  "destination": "目的端未就绪", "paused": "调度暂停", "download_window": "下载窗口未放行",
+                  "download_busy": "下载名额已占用"}
+
+
+def validated_transfers(value):
+    keys = {"active", "stalled", "cancelling", "oldest_idle_seconds", "timeout_seconds"}
+    if (not isinstance(value, dict) or set(value) != keys
+            or any(type(number) is not int or not 0 <= number <= 10**12 for number in value.values())
+            or not 1 <= value["timeout_seconds"] <= 86400
+            or value["stalled"] > value["active"] or value["cancelling"] > value["active"]):
+        return None
+    return dict(value)
+
+
+def transfer_lines(value):
+    value = validated_transfers(value)
+    if value is None:
+        return ["下载进度健康：未核实（旧版或缺少观察）"]
+    return [(f"下载进度健康：监测 {value['active']} 项，停滞 {value['stalled']} 项，回收中 {value['cancelling']} 项；"
+             f"最长无进度 {value['oldest_idle_seconds']} 秒，保护阈值 {value['timeout_seconds']} 秒")]
 
 
 def validated_admission(value):
@@ -151,12 +171,13 @@ def admission_lines(value):
 
 
 LABELS = {"heartbeat": "运行心跳", "telegram": "Telegram 连接", "destination": "WebDAV 最近目录探测",
-          "queue": "调度开关", "capacity": "下载资源保护"}
+          "queue": "队列调度", "capacity": "下载资源保护"}
 STATES = {"ok": "通过", "failed": "未通过", "unknown": "未核实／记录过期",
           "partial": "仅账号根目录可读，目标目录未确认", "paused": "手动暂停", "cooldown": "冷却中，不追加请求"}
 
 WAIT_LABELS = {"retry": "等待重试时间", "member": "等待个人并发额度", "budget": "等待暂存额度",
-               "disk": "等待真实磁盘空间", "other": "等待其他放行条件"}
+               "disk": "等待真实磁盘空间", "download_slots": "等待下载名额",
+               "download_stall": "等待停滞下载回收", "other": "等待其他放行条件"}
 
 
 def waiting_lines(value):
@@ -198,6 +219,10 @@ def check(instance, session, log) -> bool:
     log(listener_line(report.get("listener")))
     for line in admission_lines(report.get("admission")):
         log(line)
+    for line in transfer_lines(report.get("transfers")):
+        log(line)
+    if report.get("queue_wait") in {"download_slots", "download_stall"}:
+        log("队列等待原因：" + WAIT_LABELS[report["queue_wait"]])
     ready = all(value == "ok" for value in checks.values())
     log("业务就绪：" + ("基础条件通过" if ready else "尚未全部确认")
         + "；以上为 Bot 基础条件，个人监听单独观察；不额外请求 Telegram/WebDAV，不代表实际转存完成。")

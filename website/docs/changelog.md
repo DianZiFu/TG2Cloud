@@ -4,6 +4,8 @@
 
 2026-11-15，[v1.5.9 正式版](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.9)已发布；同标签原生双架构 CI、源码、共享镜像和两版 Compose 包已核验。新增下载无进度保护、安全回收、停滞就绪降级与明确排队原因；保留慢速大文件、监听冷却、流式背压和原有转存策略。schema 3、配置与 Session 不变，两种部署按原方式升级。实际进度见[仓库更新记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/CHANGELOG.md)与[本版记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/docs/development/V159-ACCEPTANCE.md)。
 
+同日用户补充 CloudDrive2 一键脚本的 v1.5.8 → v1.5.9 实机日志，并确认实际转存完成、验收通过。两次诊断的业务就绪与 8 个监听来源健康，等待原因明确为下载名额占满。停滞超时回收、OpenList、独立 Compose、其他架构及公网／回退等仍需独立验收，范围见本版记录。
+
 ## TG2Cloud v1.5.8
 
 2026-11-08，[v1.5.8 正式版](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.8)已发布；Compose 增加统一离线管理、凭据隔离与资源保护。共享代码保持两种部署的归属边界，schema 3、现有配置与 Session 保留。同标签原生双架构 CI、源码、共享镜像和两版部署包已核验；真实 VPS、Telegram 与网关转存由用户发布后验收，见[本版记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/docs/development/V158-ACCEPTANCE.md)。

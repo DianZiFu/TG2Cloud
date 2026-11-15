@@ -35,7 +35,7 @@ Telegram → TG2Cloud → rclone → CloudDrive2 / OpenList WebDAV → 你的云
 
 当前稳定版 **[v1.5.9](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.9)**，支持 Linux；发布与兼容范围见[本版记录](docs/development/V159-ACCEPTANCE.md)。
 
-v1.5.9：下载停滞保护与排队诊断；[发布与兼容说明](docs/development/V159-ACCEPTANCE.md)。
+v1.5.9：下载停滞保护与排队诊断；[CloudDrive2 升级与实际转存验收](docs/development/V159-ACCEPTANCE.md)。
 
 ## 开始使用
 

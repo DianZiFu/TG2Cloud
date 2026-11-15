@@ -1,6 +1,6 @@
 # 资料来源与验证边界
 
-本文源码版本为 **v1.5.9**，核对日期 **2026 年 11 月 15 日**；[本版正式下载](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.9)包含已核验的源码、共享镜像与两版 Compose 包。CI、SHA256 和尚未执行的真实环境项目见[当前发布记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/docs/development/V159-ACCEPTANCE.md)。
+本文源码版本为 **v1.5.9**，核对日期 **2026 年 11 月 15 日**；[本版正式下载](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.9)包含已核验的源码、共享镜像与两版 Compose 包。CI、SHA256、用户确认的 CloudDrive2 一键脚本升级与转存结果，以及其他未验收范围见[当前发布记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/docs/development/V159-ACCEPTANCE.md)。
 
 ## 主要来源
 

@@ -4,6 +4,8 @@
 
 版本日期：2026-11-15。[v1.5.9 正式版](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.9)已发布；同标签原生双架构 CI、源码、共享镜像和两版 Compose 包已核验。普通下载与流式取源增加 300 秒有效字节无进度保护，安全回收后按既有次数限制重试；监听有限冷却、正常慢速下载与目的端背压分别处理。业务就绪识别停滞，诊断区分等待下载名额与等待停滞回收。无数据库迁移、新依赖或安装参数变化，两种部署使用同一 Bot 核心。实际 CI、资源及发布后 VPS 验收见[本版记录](docs/development/V159-ACCEPTANCE.md)。
 
+发布后验收补充（2026-11-15）：用户提供 Debian 13、Linux（AMD64）的 CloudDrive2 一键脚本升级日志及两次诊断，并确认 v1.5.8 → v1.5.9 升级与实际转存完成。配置保留、数据库备份、Bot／CLI 版本、容器健康、本机 HTTPS、业务就绪及监听健康通过，排队原因明确为等待下载名额。300 秒停滞回收故障路径、OpenList、独立 Compose、其他架构及公网／回退等仍未实机验收；详细范围见[用户验收记录](docs/development/V159-ACCEPTANCE.md)。
+
 ## TG2Cloud v1.5.8
 
 版本日期：2026-11-08。[v1.5.8 正式版](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.8)已发布；同标签原生双架构 CI、源码、共享镜像及两 Edition format 3 部署包已核验，详见[发布记录](docs/development/V158-ACCEPTANCE.md)。真实用户 VPS 实机验收尚未执行，由用户在发布后进行。

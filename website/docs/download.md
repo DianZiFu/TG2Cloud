@@ -1,6 +1,6 @@
 # 安装、下载与校验
 
-本文对应 **TG2Cloud v1.5.9**，核对日期：2026-11-15。[正式版](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.9)源码、共享镜像和两版 Compose 包已发布并核验；真实 VPS 验收安排在发布之后，见[本版记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/docs/development/V159-ACCEPTANCE.md)。
+本文对应 **TG2Cloud v1.5.9**，核对日期：2026-11-15。[正式版](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.9)源码、共享镜像和两版 Compose 包已发布并核验；用户已确认 CloudDrive2 一键脚本升级与实际转存通过，其他未验收范围见[本版记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/docs/development/V159-ACCEPTANCE.md)。
 
 业务部署只使用正式稳定源码，部署平台为 Linux。已有外部 WebDAV 工具须在主菜单 15 的子菜单选择 8 升级，才会使用新向导。
 
@@ -98,6 +98,6 @@ sha256sum -c SHA256SUMS.txt
 
 ## 发布与验收范围
 
-源码、镜像和两版 Compose 部署包须使用同一版本；Compose 下载和摘要核对见[完整教程](/deploy/compose/)。完整版本事实见[更新日志](/changelog/)，当前资产和未执行的真实环境项目见[发布记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/docs/development/V159-ACCEPTANCE.md)。
+源码、镜像和两版 Compose 部署包须使用同一版本；Compose 下载和摘要核对见[完整教程](/deploy/compose/)。完整版本事实见[更新日志](/changelog/)，当前资产、用户实机结果和未验收范围见[发布记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/docs/development/V159-ACCEPTANCE.md)。
 
 发布及校验成功不等于真实 VPS、Telegram、DNS／ACME 或网盘转存已验收。测试结论按实际版本和范围理解，不提供 EXE 下载和桌面构建步骤。

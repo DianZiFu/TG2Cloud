@@ -35,7 +35,7 @@ Optional [administrator monitoring and transfer plans](docs/LISTENING.md) are di
 
 Current stable version: **[v1.5.9](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.9)**, for Linux. See the [release and compatibility record](docs/development/V159-ACCEPTANCE.md).
 
-v1.5.9 adds download stall protection and queue diagnostics; see the [release and compatibility record](docs/development/V159-ACCEPTANCE.md).
+v1.5.9 adds download stall protection and queue diagnostics; see the [user-confirmed CloudDrive2 script upgrade and transfer record](docs/development/V159-ACCEPTANCE.md).
 
 ## Getting started
 

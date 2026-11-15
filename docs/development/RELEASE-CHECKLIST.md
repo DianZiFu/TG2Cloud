@@ -13,7 +13,7 @@
 可生成审阅计划，下面的目标版本仅为示例，须高于当前版本：
 
 ```bash
-python -B .github/scripts/prepare_release.py --version 1.5.9 --directory build/release-plan-159
+python -B .github/scripts/prepare_release.py --version 1.5.10 --directory build/release-plan-1510
 python -B .github/scripts/maintenance_preflight.py --previous-tag v1.5.8 --json
 ```
 

@@ -1,6 +1,6 @@
 # 安装、下载与校验
 
-本文对应 **TG2Cloud v1.5.9**（待发布），核对日期：2026-11-15。当前可下载的[稳定版](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.8)仍为 v1.5.8。新版本源码、共享镜像和两版 Compose 包须全部核验完成后再升级，真实 VPS 验收安排在发布之后，见[本版记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/docs/development/V159-ACCEPTANCE.md)。
+本文对应 **TG2Cloud v1.5.9**，核对日期：2026-11-15。[正式版](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.9)源码、共享镜像和两版 Compose 包已发布并核验；真实 VPS 验收安排在发布之后，见[本版记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/docs/development/V159-ACCEPTANCE.md)。
 
 业务部署只使用正式稳定源码，部署平台为 Linux。已有外部 WebDAV 工具须在主菜单 15 的子菜单选择 8 升级，才会使用新向导。
 
@@ -77,8 +77,8 @@ tg2cloud uninstall --edition all --check
 
 | 文件 | 用途 |
 | --- | --- |
-| [TG2Cloud-v1.5.8-source.tar.gz](https://github.com/LuoPoJunZi/TG2Cloud/releases/download/v1.5.8/TG2Cloud-v1.5.8-source.tar.gz) | 同标签源码，包含两 Edition 运行资源 |
-| [SHA256SUMS.txt](https://github.com/LuoPoJunZi/TG2Cloud/releases/download/v1.5.8/SHA256SUMS.txt) | 对应该次 Actions 源码包的校验清单 |
+| [TG2Cloud-v1.5.9-source.tar.gz](https://github.com/LuoPoJunZi/TG2Cloud/releases/download/v1.5.9/TG2Cloud-v1.5.9-source.tar.gz) | 同标签源码，包含两 Edition 运行资源 |
+| [SHA256SUMS.txt](https://github.com/LuoPoJunZi/TG2Cloud/releases/download/v1.5.9/SHA256SUMS.txt) | 对应该次 Actions 源码包的校验清单 |
 
 将两个文件保存到同一目录，在 Linux 中执行：
 
@@ -86,9 +86,9 @@ tg2cloud uninstall --edition all --check
 sha256sum -c SHA256SUMS.txt
 ```
 
-当前稳定版 v1.5.8 源码包 SHA256 为 `944649eae13ad8a637da7d0097200242405523ed7a098d74bdfe898951894ce8`。校验不一致时停止，不混用其他版本的清单。校验和不是数字签名。
+本版源码包 SHA256 为 `453a535c490d855ac861a380db315833dba743606e580484b8cc5ab51a83cf99`。校验不一致时停止，不混用其他版本的清单。校验和不是数字签名。
 
-[本版 Release](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.8) · [最新 Release](https://github.com/LuoPoJunZi/TG2Cloud/releases/latest) · [全部 Releases](https://github.com/LuoPoJunZi/TG2Cloud/releases)
+[本版 Release](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.9) · [最新 Release](https://github.com/LuoPoJunZi/TG2Cloud/releases/latest) · [全部 Releases](https://github.com/LuoPoJunZi/TG2Cloud/releases)
 
 ### 在线入口与源码资产的区别
 

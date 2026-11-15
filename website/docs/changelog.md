@@ -2,7 +2,7 @@
 
 ## TG2Cloud v1.5.9
 
-2026-11-15，待发布。新增下载无进度保护、安全回收、停滞就绪降级与明确排队原因；保留慢速大文件、监听冷却、流式背压和原有转存策略。schema 3、配置与 Session 不变，两种部署按原方式升级。实际进度见[仓库更新记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/CHANGELOG.md)与[本版记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/docs/development/V159-ACCEPTANCE.md)。
+2026-11-15，[v1.5.9 正式版](https://github.com/LuoPoJunZi/TG2Cloud/releases/tag/v1.5.9)已发布；同标签原生双架构 CI、源码、共享镜像和两版 Compose 包已核验。新增下载无进度保护、安全回收、停滞就绪降级与明确排队原因；保留慢速大文件、监听冷却、流式背压和原有转存策略。schema 3、配置与 Session 不变，两种部署按原方式升级。实际进度见[仓库更新记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/CHANGELOG.md)与[本版记录](https://github.com/LuoPoJunZi/TG2Cloud/blob/main/docs/development/V159-ACCEPTANCE.md)。
 
 ## TG2Cloud v1.5.8
 

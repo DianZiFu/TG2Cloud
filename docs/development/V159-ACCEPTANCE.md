@@ -1,6 +1,6 @@
 # v1.5.9 发布与兼容记录
 
-状态：2026-11-15，待发布。修复与本地验证完成，GitHub CI、同标签原生双架构检查和正式资源仍待执行；真实用户 VPS 验收尚未执行，安排在发布成功后。
+状态：2026-11-15，v1.5.9 已正式发布。GitHub CI、同标签原生双架构检查及正式资源下载核验完成；真实用户 VPS 验收尚未执行，安排在发布成功后。
 
 ## 修复与兼容
 
@@ -24,11 +24,28 @@
 
 辅助 A `16a51c86dd948fe897ace17e464e3ab2828ca953` 已公开，80 个 helper 文件的远端 Git blob 和 3 个匿名 raw 样本逐字节核验。入口 B 固定该真实不可变提交，不自指或使用 moving main。
 
-A 的五组 CI 全部通过：[原生两架构](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686325993)、[Python 3.10／3.13 CLI](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686326044)、[仓库](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686326004)、[文档](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686325981)、[网站](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686325987)。[PR #34](https://github.com/LuoPoJunZi/TG2Cloud/pull/34)保留 A/B 审阅历史；B 与同标签发布检查尚待执行。
+A 的五组 CI 全部通过：[原生两架构](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686325993)、[Python 3.10／3.13 CLI](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686326044)、[仓库](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686326004)、[文档](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686325981)、[网站](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686325987)。[PR #34](https://github.com/LuoPoJunZi/TG2Cloud/pull/34)保留 A/B 审阅历史；入口 B `0bd9ec6c6c5a829a2f98c060c1d9f42a7486bff3` 的五组 CI 与同提交 main 检查通过。
 
-当前未生成 v1.5.9 正式资产，不填写虚构摘要或镜像 digest；源码 Release 与 Compose 发布均通过后才更新实际结果。
+[同标签原生双架构与源码发布](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43687312562)、[Compose 原生镜像与部署包发布](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43687618216)均成功。正式 Tag 指向 `0bd9ec6c6c5a829a2f98c060c1d9f42a7486bff3`，不移动旧标签或替换历史资产。
 
-计划核对的五份资源如下，SHA256 以实际下载内容和同版清单为准，校验和不是数字签名：
+下载全部五份正式资产，核对 GitHub 资产 digest、两份 SHA256 清单与实际字节。源码 409 个文件逐字节匹配 Tag Git blob，包含新 watchdog；两份 format 3 包逐文件匹配同标签生成器，helper、模板、版本、提交及镜像一致。匿名读取 GHCR index、两份子 manifest 与配置，核对原生平台、1.5.9 版本和相同 revision。校验和不是数字签名。
+
+共享镜像：`ghcr.io/luopojunzi/tg2cloud@sha256:d66e255bfffdb0c41bc0207b7eca4d1fda87ca6e75de46f701f7200c27c30353`。
+
+| 资产 | SHA256 |
+| --- | --- |
+| `COMPOSE-SHA256SUMS.txt` | `ef902521ca6367bcb491d699c44b93cded926eb8a5290d69f7e23cf295b63613` |
+| `SHA256SUMS.txt` | `4badad6f19d69c869c770b99cc92bf048e341d30f6c5feeff3ea6e3b60de30a1` |
+| `TG2Cloud-v1.5.9-compose-clouddrive2.tar.gz` | `db8f8c86e8be6a1d9387f22b759a9c48bd3147ee3cfd7cfa41f70b40b16c40d4` |
+| `TG2Cloud-v1.5.9-compose-openlist.tar.gz` | `baac7a894d93c6058ee57cb818667384448afe76e8db307e8ffb459eb99e7f2b` |
+| `TG2Cloud-v1.5.9-source.tar.gz` | `453a535c490d855ac861a380db315833dba743606e580484b8cc5ab51a83cf99` |
+
+- Linux AMD64 子镜像：`sha256:2b1e13bbd57dd3e416a1241ed15f559427319c4fbab4c285ca0275aeed346700`。
+- Linux ARM64 子镜像：`sha256:9c8113c15efc860e660d7dab65bc7f2ea072ac2df11906386a536591035ebce1`。
+
+以上是自动化与实际发布资产核验，不等于真实 Telegram、用户网关和 VPS 验收。
+
+正式资源包括：
 
 - `TG2Cloud-v1.5.9-source.tar.gz`
 - `SHA256SUMS.txt`

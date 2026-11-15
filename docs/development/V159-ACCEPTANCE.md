@@ -22,7 +22,11 @@
 
 ## helper A、入口 B 与发布资产
 
-待公开并核验辅助提交 A，再以真实 SHA 固定入口 B。当前未生成 v1.5.9 正式资产，不填写虚构摘要、Actions 地址或镜像 digest；源码 Release 与 Compose 发布均通过后才更新此处为实际结果。
+辅助 A `16a51c86dd948fe897ace17e464e3ab2828ca953` 已公开，80 个 helper 文件的远端 Git blob 和 3 个匿名 raw 样本逐字节核验。入口 B 固定该真实不可变提交，不自指或使用 moving main。
+
+A 的五组 CI 全部通过：[原生两架构](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686325993)、[Python 3.10／3.13 CLI](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686326044)、[仓库](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686326004)、[文档](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686325981)、[网站](https://github.com/LuoPoJunZi/TG2Cloud/actions/runs/43686325987)。[PR #34](https://github.com/LuoPoJunZi/TG2Cloud/pull/34)保留 A/B 审阅历史；B 与同标签发布检查尚待执行。
+
+当前未生成 v1.5.9 正式资产，不填写虚构摘要或镜像 digest；源码 Release 与 Compose 发布均通过后才更新实际结果。
 
 计划核对的五份资源如下，SHA256 以实际下载内容和同版清单为准，校验和不是数字签名：
 

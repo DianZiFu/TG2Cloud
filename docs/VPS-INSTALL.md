@@ -2,7 +2,7 @@
 
 在自己的 Debian / Ubuntu Linux 主机上运行向导，选择 CloudDrive2 或 OpenList。新装先收集信息、预检和确认；已有标准实例保留配置升级。公网管理使用 HTTPS；可信内网和独立 Compose 分别使用[内网入口](LAN-INSTALL.md)与[Compose 教程](COMPOSE.md)。
 
-当前入口固定辅助代码 A `9e103d68f48e36503a76b87770980ff292329e63`；业务只安装正式稳定 Release。实际版本、CI、资产和未执行的实机项目见[当前发布记录](development/V158-ACCEPTANCE.md)，不在本教程累积旧版 pin。
+当前入口固定辅助代码 A `16a51c86dd948fe897ace17e464e3ab2828ca953`；业务只安装正式稳定 Release。实际版本、CI、资产和未执行的实机项目见[当前发布记录](development/V159-ACCEPTANCE.md)，不在本教程累积旧版 pin。
 
 <a id="公网-nat-的已知限制与待发布修复"></a>
 
